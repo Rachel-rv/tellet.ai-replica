@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tellet AI Replica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <style>
+        /* Reset & General Styles */
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: #fff;
+            color: #222;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #fff;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 20px 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar.scrolled-green {
+            background-color: #003D2C;
+        }
+
+        .navbar.scrolled-green .logo a,
+        .navbar.scrolled-green .menu a,
+        .navbar.scrolled-green .nav-buttons a {
+            color: #fff;
+            border-color: #fff;
+        }
+
+        .navbar.scrolled-green .nav-buttons a.demo {
+            background-color: #FF3D7F;
+            border: none;
+            color: white;
+        }
+
+        .navbar .logo a {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #003D2C;
+        }
+
+        .navbar .menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .menu a {
+            color: #222;
+            margin: 0 15px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .menu a:hover {
+            color: #007bff;
+        }
+
+        .nav-buttons a {
+            border: 2px solid #003D2C;
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-buttons a:hover {
+            background-color: #003D2C;
+            color: #fff;
+        }
+
+        .nav-buttons a.demo {
+            background-color: #FF3D7F;
+            border: none;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .nav-buttons a.demo:hover {
+            background-color: #e63272;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: #FADADD;
+            padding: 80px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .hero .hero-content {
+            max-width: 550px;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: #003322;
+            margin-bottom: 20px;
+        }
+
+        .hero h2 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #a80044;
+            margin-bottom: 30px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #333;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .hero .cta-button {
+            font-size: 1.1rem;
+            padding: 14px 32px;
+            background-color: #003322;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .hero .cta-button:hover {
+            background-color: #004f38;
+        }
+
+        .hero .phone-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .hero img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Insights Section (Graphs and Data) - Moved up */
+        .insight-section {
+            display: flex;
+            align-items: flex-start;
+            padding: 60px;
+            background-color: #f8f8f8;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .charts-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 400px;
+        }
+
+        .chart-box {
+            background-color: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            color: #222;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-box h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .chart-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .chart-box li {
+            margin-bottom: 5px;
+        }
+
+        .chart-box img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .chart-box.pie .legend {
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+        }
+
+        .chart-box .legend li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .chart-box .legend .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+            display: inline-block;
+        }
+
+        .mockup-right {
+            flex: 1;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .mockup-right img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* New "It's not magic..." Section */
+        .magic-section {
+            padding: 60px 40px;
+            background-color: #F0FFF0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .magic-section .image-container {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .magic-section .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .magic-section .text-content {
+            flex: 1;
+            max-width: 500px;
+            padding-left: 40px;
+        }
+
+        .magic-section h2 {
+            font-size: 2.5rem;
+            color: #003D2C;
+            margin-bottom: 20px;
+        }
+
+        .magic-section p {
+            font-size: 1.1rem;
+            color: #333;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        /* Continuation Section - "The newest addition..." */
+        .continuation-section {
+            padding: 60px 40px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .continuation-section .text-content {
+            flex: 1;
+            max-width: 500px;
+            padding-right: 40px;
+        }
+
+        .continuation-section h2 {
+            font-size: 2.5rem;
+            color: #222;
+            margin-bottom: 20px;
+        }
+
+        .continuation-section p {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .continuation-section .image-container {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .continuation-section .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Effective insights section */
+        .effective-insights-section {
+            background-color: #003D2C; /* Dark green background */
+            color: #fff;
+            padding: 80px 40px;
+            text-align: center;
+        }
+
+        .effective-insights-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .effective-insights-section p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        /* Steps layout within the effective insights section */
+        .effective-insights-section .steps {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .effective-insights-section .step {
+            text-align: center;
+            max-width: 200px;
+        }
+
+        .effective-insights-section .step h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .effective-insights-section .step p {
+            font-size: 1rem;
+            color: #eee;
+        }
+
+        /* Cookie Popup */
+        .cookie-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #f1f9f6;
+            padding: 16px 24px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .cookie-popup button {
+            background-color: #F472B6;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 20px;
+                border-radius: 0;
+                margin: 0;
+            }
+
+            .navbar .menu {
+                order: 1;
+                margin-top: 10px;
+            }
+
+            .hero {
+                padding: 60px 20px;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero .hero-content {
+                max-width: 100%;
+                order: 0;
+            }
+
+            .hero .phone-image {
+                order: 1;
+            }
+
+            .hero img {
+                max-width: 80%;
+            }
+
+            .insight-section {
+                flex-direction: column;
+                align-items: center;
+                padding: 40px 20px;
+            }
+
+            .magic-section {
+                flex-direction: column;
+                text-align: center;
+                padding: 40px 20px;
+            }
+
+            .magic-section .text-content {
+                padding-left: 0;
+                margin-top: 30px;
+            }
+
+            .continuation-section {
+                flex-direction: column;
+                text-align: center;
+                padding: 40px 20px;
+            }
+
+            .continuation-section .text-content {
+                padding-right: 0;
+                margin-top: 30px;
+            }
+
+            .effective-insights-section {
+                padding: 60px 20px;
+            }
+
+            .effective-insights-section .steps {
+                flex-direction: column;
+                align-items: center;
+                gap: 40px;
+            }
+        }
+
+        .brand-promotion-background {
+            background-color: #FF69B4;
+        }
+        .tellet-section {
+  background-color: #000;
+  color: #fff;
+  padding: 100px 40px;
+}
+
+.tellet-section {
+  background-color: #fcddec; /* Baby pink */
+  color: #000;
+  padding: 100px 40px;
+}
+
+.tellet-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.tellet-text {
+  flex: 1;
+  min-width: 300px;
+}
+
+.tellet-text h1 {
+  font-size: 50px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.tellet-text h1 span {
+  color: #00FFA7;
+}
+
+.tellet-text p {
+  font-size: 20px;
+  line-height: 1.6;
+}
+
+.tellet-image {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  justify-content: center;
+}
+
+.tellet-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.future-section {
+  background-color: #ff6f99; /* dark pink */
+  padding: 80px 20px;
+  text-align: center;
+  color: white;
+}
+
+.future-container h4 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #802c4c; /* darker tone for subtitle */
+}
+
+.future-container h1 {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.future-container p {
+  font-size: 20px;
+  color: #ffeef4;
+  margin-bottom: 60px;
+}
+
+.future-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.future-card {
+  background-color: #ffeef4; /* light pink cards */
+  color: #5b1d2b; /* dark text */
+  border-radius: 30px;
+  padding: 30px;
+  max-width: 320px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  text-align: left;
+}
+
+.future-card img {
+  width: 40px;
+  margin-bottom: 20px;
+}
+
+.future-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.future-card p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.demo-section {
+  background-color: #035c3d; /* deep green */
+  padding: 100px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.demo-container {
+  background-color: #ff6fa5; /* dark pink */
+  border-radius: 50px;
+  padding: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  width: 100%;
+  gap: 40px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+}
+
+.demo-text {
+  max-width: 600px;
+  color: white;
+}
+
+.demo-text h1 {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.demo-text p {
+  font-size: 20px;
+  margin-bottom: 30px;
+  color: #ffeef4;
+}
+
+.demo-text button {
+  background-color: #064b2d; /* dark green button */
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 40px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.demo-text button:hover {
+  background-color: #043b22;
+}
+
+.demo-image img {
+  max-width: 300px;
+  border-radius: 40px;
+}
+
+.footer {
+  background-color: #3d0d1b; /* dark maroon background */
+  color: #ffffff;
+  padding: 60px 40px 30px;
+  position: relative;
+  font-family: Arial, sans-serif;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.footer-logo .brand {
+  font-size: 64px;
+  font-weight: bold;
+  color: #ff7598;
+  margin-bottom: 40px;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: flex-start;
+  gap: 80px;
+  flex-wrap: wrap;
+}
+
+.footer-links h4 {
+  color: #ff7598;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 8px;
+}
+
+.footer-links a {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 50px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+  font-size: 14px;
+  color: #d1c7c7;
+}
+
+.linkedin-icon img {
+  width: 24px;
+  height: 24px;
+  background-color: #ff7598;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo"><a href="#"><strong>tellet</strong></a></div>
+        <div class="menu">
+            <a href="#">Solution</a>
+            <a href="#">Resources</a>
+        </div>
+        <div class="nav-buttons">
+            <a href="#">Log in</a>
+            <a href="#" class="demo">Book a demo</a>
+        </div>
+    </nav>
+
+    <section class="hero" data-aos="fade-up">
+        <div class="hero-content" data-aos="fade-right">
+            <h1>Customer insights.</h1>
+            <h2>Faster. Cheaper. Deeper.</h2>
+            <p>Tellet is the AI interview platform trusted by companies of all sizes to help them understand what
+                customers think, feel and do.</p>
+            <button class="cta-button">Give it a try</button>
+        </div>
+        <div class="phone-image" data-aos="fade-left">
+            <img src="images/Screenshot_2025-05-05_224843-removebg-preview.png" alt="Phone with Tellet UI" />
+        </div>
+    </section>
+
+    <section class="insight-section brand-promotion-background" data-aos="fade-up">
+        <div class="charts-left">
+            <div class="chart-box" data-aos="fade-in" data-aos-delay="50">
+                <h3>Brand descriptions</h3>
+                <ul>
+                    <li>Comfortable</li>
+                    <li>Innovative</li>
+                    <li>High-Quality</li>
+                    <li>Expensive</li>
+                    <li>Sustainable</li>
+                </ul>
+            </div>
+            <div class="chart-box pie" data-aos="fade-in" data-aos-delay="150">
+                <h3>Brand associations</h3>
+                <img src="images/pie-Photoroom.png" alt="Pie chart" style="max-width: 200px;">
+                <ul class="legend">
+                    <li><span class="dot" style="background:#FFC0CB"></span> Comfortable 10%</li>
+                    <li><span class="dot" style="background:#60D394"></span> Sustainable 30%</li>
+                    <li><span class="dot" style="background:#1A8754"></span> Innovative 40%</li>
+                    <li><span class="dot" style="background:#EC407A"></span> Expensive 15%</li>
+                </ul>
+            </div>
+            <div class="chart-box" data-aos="fade-in" data-aos-delay="250">
+                <h3>Most sold items</h3>
+                <img src="images/bar-Photoroom.png" alt="Bar chart" style="max-width: 200px;">
+            </div>
+        </div>
+        <div class="mockup-right" data-aos="fade-in" data-aos-delay="350">
+            <img src="images/mobile-chat.png" alt="Mobile chat mockup" />
+        </div>
+    </section>
+
+    <section class="magic-section" data-aos="fade-up">
+        <div class="image-container" data-aos="fade-right">
+            <img src="images\man-Photoroom.png" alt="Person using Tellet on phone" />
+        </div>
+        <div class="text-content" data-aos="fade-left">
+            <h2>It's not magic,<br>it's Tellet.</h2>
+            <p>Conduct hundreds of interviews at once. Have participants reply freely with voice, video or photos.
+                Let the AI ask follow-up
+                questions. Analyse it all in one click. Oh, and ask your transcripts that question you thought of 6
+                months later.</p>
+        </div>
+    </section>
+
+    <section class="continuation-section" data-aos="fade-up">
+        <div class="text-content" data-aos="fade-right">
+            <h2>The newest addition to<br>your research toolkit.</h2>
+            <p><strong>Insights in hours, not weeks.</strong><br>
+                Gather the rich insights of qual interviews, at the speed and scale of quant surveys. Get detailed
+                analysis in one click.</p>
+            <p><strong>Deep insights, without deep pockets.</strong></p>
+            <a href="#" class="learn-more-link">Learn more</a>
+        </div>
+        <div class="image-container" data-aos="fade-left">
+            <img src="images\woman-Photoroom.png" alt="Woman with Tablet" />
+        </div>
+    </section>
+
+    <section class="effective-insights-section" data-aos="fade-up">
+        <h2>Effective insights in 1, 2, 3, 4.</h2>
+        <div class="steps">
+            <div class="step" data-aos="fade-in" data-aos-delay="50">
+                <h3>1</h3>
+                <p>Create a project and invite participants</p>
+            </div>
+            <div class="step" data-aos="fade-in" data-aos-delay="150">
+                <h3>2</h3>
+                <p>Participants reply in their own time</p>
+            </div>
+            <div class="step" data-aos="fade-in" data-aos-delay="250">
+                <h3>3</h3>
+                <p>Tellet AI analyses the results</p>
+            </div>
+            <div class="step" data-aos="fade-in" data-aos-delay="350">
+                <h3>4</h3>
+                <p>Explore your interactive report</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="cookie-popup">
+        <span>We use cookies to personalize content, run ads, and analyze traffic.</span>
+        <button>Okay</button>
+    </div>
+    <section class="tellet-section">
+      <div class="tellet-container">
+        <div class="tellet-text">
+          <h1>It’s not just AI, it’s <span>tellet.</span></h1>
+          <p>
+            After conducting hundreds of AI research interviews and testing all the tools,<br>
+            we built the one we wanted.
+          </p>
+        </div>
+        <div class="tellet-image">
+          <img src="images\wolap.png" alt="Tellet Illustration" />
+        </div>
+      </div>
+    </section>
+    
+    <section class="future-section">
+      <div class="future-container">
+        <h4>Just imagine…</h4>
+        <h1>One year from now.</h1>
+        <p>You did it. You chose Tellet. What does research life look like now?</p>
+    
+        <div class="future-cards">
+          <div class="future-card">
+            <img src="images\heart.png" alt="Heart Icon" />
+            <h3>You’re at the heart of decision-making.</h3>
+            <p>
+              You’ve never said yes to so many research requests. Your colleagues
+              and clients are making smarter decisions, thanks to clearer insights.
+            </p>
+          </div>
+    
+          <div class="future-card">
+            <img src="images/china.png" alt="Language Icon" />
+            <h3>You speak 57 languages.</h3>
+            <p>
+              You create your discussion guides in English, and let your participants
+              choose whichever language they’re most comfortable with. You get
+              insights without barriers.
+            </p>
+          </div>
+    
+          <div class="future-card">
+            <img src="images\people.png" alt="Customer Icon" />
+            <h3>You truly understand your customer.</h3>
+            <p>
+              No longer tapping out tiny replies on tiny keyboards, participants
+              answer your questions with a clear voice. Your organisation gets
+              unfiltered opinions, motivations and emotions.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="demo-section">
+      <div class="demo-container">
+        <div class="demo-text">
+          <h1>Ready for faster,<br>cheaper, deeper insights?</h1>
+          <p>Get in touch and we’ll set you up with a Tellet demo.</p>
+          <button>Talk to Greg</button>
+        </div>
+        <div class="demo-image">
+          <img src="images\specs.png" alt="Greg's photo" />
+        </div>
+      </div>
+    </section>
+    
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <h1 class="brand">tellet</h1>
+        </div>
+        <div class="footer-links">
+          <div class="quick-links">
+            <h4>Quick links</h4>
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Solution</a></li>
+              <li><a href="#">Resources</a></li>
+              <li><a href="#">Contact</a></li>
+              <li><a href="#">Book a meeting</a></li>
+              <li><a href="#">Login</a></li>
+              <li><a href="#">Vacancies</a></li>
+            </ul>
+          </div>
+          <div class="legal-links">
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="#">Terms of service</a></li>
+              <li><a href="#">Privacy policy</a></li>
+              <li><a href="#">Interview terms</a></li>
+              <li><a href="#">Cookie policy</a></li>
+              <li><a href="#">Cookie settings</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>© Tellet. Copyright 2024</p>
+          <a href="#" class="linkedin-icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" />
+          </a>
+        </div>
+      </div>
+    </footer>
+    
+        
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Basic JavaScript to change navbar color on scroll
+        window.addEventListener('scroll', () => {
+            const insightSection = document.querySelector('.insight-section');
+            const navbar = document.querySelector('.navbar');
+
+            if (insightSection && navbar) {
+                const insightSectionTop = insightSection.offsetTop;
+                const scrollPosition = window.scrollY;
+                const viewportHeight = window.innerHeight;
+
+                // Change navbar to green when the top of the insight section is within the viewport
+                if (scrollPosition > insightSectionTop - viewportHeight / 2) {
+                    navbar.classList.add('scrolled-green');
+                } else {
+                    navbar.classList.remove('scrolled-green');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
